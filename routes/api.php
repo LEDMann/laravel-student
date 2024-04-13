@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\EnrolmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::controller(EnrolmentController::class)->group(function () {
+    Route::post('/invoice/pay', 'pay')->name('pay');
+    Route::get('/enrolments/list', 'list')->name('list_enrolments');
+    Route::post('/enrolments/list/{user}', 'listUserEnrolments')->name('list_user_enrolments');
+})->middleware("auth:api");

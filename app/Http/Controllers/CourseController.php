@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Controllers\EnrolmentController;
 use Illuminate\View\View;
 use App\Models\Course;
 use App\Models\Enrolment;
@@ -47,6 +48,7 @@ class CourseController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'fee' => $request->fee,
+            'paid' => false,
         ]);
         return view('dashboard.all-courses', [
             'courses' => Course::get()->unique(),
@@ -58,7 +60,17 @@ class CourseController extends Controller
      */
     public function enrol(Request $request): View
     {
-        Auth::user()->courses()->attach($request->course_id, ['active' => true]);
+        $enrolment = Auth::user()->courses()->attach($request->course_id, ['active' => true]);
+        
+        // $response = Http::post('http://laravel-finance.test/invoice/create',[
+        //     'enrolment_id' => $enrolment->id,
+        //     'amount' => $enrolment->course->fee,
+        // ]);
+
+        // return redirect()->action(
+        //     [EnrolmentController::class, 'createInvoice'], ['enrolment' => $enrolment]
+        // );
+
         return view('dashboard.user-courses', [
             'courses' => $request->user()->courses()->get()->unique(),
         ]);
@@ -74,15 +86,4 @@ class CourseController extends Controller
             'courses' => $request->user()->courses()->get()->unique(),
         ]);
     }
-
-    // /**
-    //  * Handle an incoming course request.
-    //  */
-    // public function store(Request $request): View
-    // {
-    //     dd($request->user()->courses()->get());
-    //     return view('dashboard', [
-    //         'user' => $request->user()->courses()->get(),
-    //     ]);
-    // }
 }

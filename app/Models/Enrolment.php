@@ -24,6 +24,7 @@ class Enrolment extends Pivot
      */
     protected $fillable = [
         'active',
+        'paid',
     ];
 
     /**

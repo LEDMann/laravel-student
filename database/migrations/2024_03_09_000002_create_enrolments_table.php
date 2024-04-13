@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enrolment', function (Blueprint $table) {
-            $table->id();        
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                   ->references('id')
@@ -21,7 +21,8 @@ return new class extends Migration
             $table->foreign('course_id')
                   ->references('id')
                   ->on('courses')->onDelete('cascade');
-            $table->boolean('active');
+            $table->boolean('active')->default(true);
+            $table->boolean('paid')->default(false);
             $table->timestamps();
         });
     }
